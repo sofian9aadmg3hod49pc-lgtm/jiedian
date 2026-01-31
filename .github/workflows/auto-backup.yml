@@ -1,0 +1,35 @@
+name: V2Ray Auto Backup
+
+on:
+  schedule:
+    # 每天凌晨2点执行
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+    
+    - name: Download backup from server
+      run: |
+        ssh root@${{ secrets.SERVER_IP }} \
+          "cd /workspace/jiedian/v2ray-deploy/utils && ./backup-to-github.sh"
+    
+    - name: Commit backup
+      run: |
+        git config --local user.email "backup@bot.com"
+        git config --local user.name "Backup Bot"
+        git add .
+        git commit -m "Auto backup $(date +'%Y-%m-%d')" || echo "No changes to commit"
+        git push

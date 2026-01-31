@@ -1,0 +1,27 @@
+{
+  "monitor": {
+    "port": 3001,
+    "host": "0.0.0.0",
+    "password": "v2raymonitor"
+  },
+  "v2ray": {
+    "configPath": "/usr/local/etc/v2ray/config.json",
+    "logPath": "/var/log/v2ray"
+  },
+  "data": {
+    "dataDir": "/tmp/monitor/data",
+    "statsFile": "/tmp/monitor/data/stats.json",
+    "devicesFile": "/tmp/monitor/data/devices.json"
+  },
+  "backup": {
+    "enabled": true,
+    "interval": 86400,
+    "retentionDays": 7
+  },
+  "alert": {
+    "enabled": false,
+    "cpuThreshold": 80,
+    "memoryThreshold": 80,
+    "connectionThreshold": 100
+  }
+}

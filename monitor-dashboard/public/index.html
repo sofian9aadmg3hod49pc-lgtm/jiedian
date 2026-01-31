@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V2Ray 监控面板</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 V2Ray 监控面板</h1>
+            <div class="server-info">
+                <span id="server-ip">服务器: 加载中...</span>
+                <span id="last-update">最后更新: --</span>
+            </div>
+        </header>
+
+        <main>
+            <!-- 状态卡片 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🔗</div>
+                    <div class="stat-info">
+                        <h3>当前连接</h3>
+                        <p class="stat-value" id="connections">0</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">📤</div>
+                    <div class="stat-info">
+                        <h3>上传流量</h3>
+                        <p class="stat-value" id="upload">0 MB</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">📥</div>
+                    <div class="stat-info">
+                        <h3>下载流量</h3>
+                        <p class="stat-value" id="download">0 MB</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <h3>总流量</h3>
+                        <p class="stat-value" id="total-traffic">0 MB</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 系统状态 -->
+            <div class="section">
+                <h2>系统状态</h2>
+                <div class="system-stats">
+                    <div class="system-item">
+                        <label>CPU 使用率</label>
+                        <div class="progress-bar">
+                            <div class="progress" id="cpu-usage">0%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="system-item">
+                        <label>内存使用率</label>
+                        <div class="progress-bar">
+                            <div class="progress" id="memory-usage">0%</div>
+                        </div>
+                        <div class="memory-info">
+                            <span id="memory-used">0 GB</span> / <span id="memory-total">0 GB</span>
+                        </div>
+                    </div>
+                    
+                    <div class="system-item">
+                        <label>运行时间</label>
+                        <p id="uptime">0 天 0 小时</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 设备列表 -->
+            <div class="section">
+                <h2>连接设备</h2>
+                <div class="devices-list" id="devices-list">
+                    <p class="loading">加载设备列表...</p>
+                </div>
+            </div>
+
+            <!-- 连接历史 -->
+            <div class="section">
+                <h2>连接历史</h2>
+                <div class="chart-container">
+                    <canvas id="connection-chart"></canvas>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>V2Ray监控系统 v1.0 | 实时更新</p>
+        </footer>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
