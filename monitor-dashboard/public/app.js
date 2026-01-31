@@ -214,6 +214,83 @@ function loadDevices() {
         });
 }
 
+// 加载Shadowrocket配置
+async function loadShadowrocketConfig() {
+    try {
+        const response = await fetch('api/config');
+        const result = await response.json();
+        
+        if (!result.success) {
+            document.getElementById('config-panel').innerHTML = `
+                <div class="error-message">
+                    <h4>⚠️ 配置加载失败</h4>
+                    <p>${result.message || '请先运行部署脚本生成配置'}</p>
+                </div>
+            `;
+            return;
+        }
+        
+        const { vmessLink, qrCode, serverInfo, instructions } = result.data;
+        
+        // 生成配置面板HTML
+        document.getElementById('config-panel').innerHTML = `
+            <div class="config-grid">
+                <!-- vmess://链接 -->
+                <div class="config-card">
+                    <h3><span class="config-icon">🔗</span> VMess链接</h3>
+                    <div class="copy-container">
+                        <input type="text" class="vmess-input" value="${vmessLink}" readonly>
+                        <button class="copy-btn" onclick="copyToClipboard('${vmessLink}')">
+                            <span class="copy-icon">📋</span> 复制
+                        </button>
+                    </div>
+                    <p class="config-hint">复制此链接到Shadowrocket中导入</p>
+                </div>
+                
+                <!-- 二维码 -->
+                <div class="config-card">
+                    <h3><span class="config-icon">📱</span> 扫码导入</h3>
+                    <div class="qr-container">
+                        <img src="${qrCode}" alt="VMess配置二维码" class="qr-code">
+                    </div>
+                    <p class="config-hint">使用手机相机扫描此二维码</p>
+                </div>
+                
+                <!-- 服务器信息 -->
+                <div class="config-card">
+                    <h3><span class="config-icon">⚙️</span> 服务器信息</h3>
+                    <table class="info-table">
+                        <tr><td>地址</td><td><code>${serverInfo.domain}</code></td></tr>
+                        <tr><td>端口</td><td><code>${serverInfo.port}</code></td></tr>
+                        <tr><td>协议</td><td>${serverInfo.protocol}</td></tr>
+                        <tr><td>路径</td><td><code>${serverInfo.ws_path}</code></td></tr>
+                        <tr><td>UUID</td><td><code class="uuid">${serverInfo.uuid}</code></td></tr>
+                    </table>
+                    <p class="config-hint">${instructions.ios}</p>
+                </div>
+            </div>
+        `;
+        
+    } catch (error) {
+        document.getElementById('config-panel').innerHTML = `
+            <div class="error-message">
+                <h4>❌ 网络错误</h4>
+                <p>无法连接到配置服务器: ${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+// 复制到剪贴板
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('✅ vmess://链接已复制到剪贴板！');
+    }).catch(err => {
+        console.error('复制失败:', err);
+        alert('❌ 复制失败，请手动复制');
+    });
+}
+
 // Socket事件监听
 socket.on('stats', (stats) => {
     updateStats(stats);
@@ -235,3 +312,4 @@ setInterval(loadDevices, 30000);
 
 // 初始化
 loadDevices();
+loadShadowrocketConfig();

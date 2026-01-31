@@ -33,11 +33,13 @@ const auth = basicAuth({
 const statsRouter = require('./api/stats');
 const devicesRouter = require('./api/devices');
 const systemRouter = require('./api/system');
+const configRouter = require('./api/config');
 
 app.use('/api', auth);
 app.use('/api/stats', statsRouter);
 app.use('/api/devices', devicesRouter);
 app.use('/api/system', systemRouter);
+app.use('/api/config', configRouter);
 
 // 实时数据推送
 setInterval(() => {
