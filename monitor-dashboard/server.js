@@ -167,9 +167,9 @@ setInterval(() => {
 }, 60000); // 每分钟保存一次
 
 // 启动服务器
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`V2Ray监控服务器运行在端口 ${PORT}`);
-    console.log(`访问地址: http://localhost:${PORT}`);
+    console.log(`访问地址: http://0.0.0.0:${PORT}`);
     console.log(`默认用户名: admin`);
     console.log(`默认密码: ${process.env.MONITOR_PASSWORD || 'v2raymonitor'}`);
 });
