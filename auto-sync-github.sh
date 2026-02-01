@@ -15,9 +15,9 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # 配置
-PROJECT_DIR="/workspace/jiedian"
+PROJECT_DIR="/Users/jj/CodeBuddy/20260131064809/jiedian"
 LOG_FILE="$PROJECT_DIR/.git/sync.log"
-GITHUB_REPO="https://github.com/sofian9aadmg3hod49pc-lgtm/jiedian"
+GITHUB_REPO="git@github.com:sofian9aadmg3hod49pc-lgtm/jiedian.git"
 
 # 函数: 打印带颜色的消息
 print_message() {
