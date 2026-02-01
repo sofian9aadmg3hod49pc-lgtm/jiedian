@@ -18,10 +18,6 @@ const io = socketIo(server);
 const PORT = process.env.MONITOR_PORT || 3001;
 const DATA_FILE = '/tmp/monitor/data/stats.json';
 
-// 中间件
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-
 // 基础认证
 const basicAuth = require('express-basic-auth');
 const auth = basicAuth({
@@ -29,11 +25,22 @@ const auth = basicAuth({
     challenge: true
 });
 
+// 中间件
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
 // API路由
 const statsRouter = require('./api/stats');
 const devicesRouter = require('./api/devices');
 const systemRouter = require('./api/system');
 const configRouter = require('./api/config');
+
+app.get('/', auth, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+app.get('/index.html', auth, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.use('/api', auth);
 app.use('/api/stats', statsRouter);

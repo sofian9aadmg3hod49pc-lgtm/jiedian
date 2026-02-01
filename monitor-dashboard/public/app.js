@@ -217,7 +217,10 @@ function loadDevices() {
 // 加载Shadowrocket配置
 async function loadShadowrocketConfig() {
     try {
-        const response = await fetch('api/config');
+        const response = await fetch('/api/config');
+        if (!response.ok) {
+            throw new Error(`配置接口返回错误: ${response.status}`);
+        }
         const result = await response.json();
         
         if (!result.success) {
