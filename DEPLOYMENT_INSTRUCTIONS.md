@@ -7,7 +7,7 @@
 ### 步骤1: 连接到服务器
 
 ```bash
-ssh root@66.42.124.79
+ssh root@216.128.151.224
 # 输入密码: 8@DqCfQ9)QK)rE9[
 ```
 
@@ -278,7 +278,7 @@ URL: http://ttjj11233.duckdns.org:3001
 nslookup ttjj11233.duckdns.org
 ```
 
-应该返回 `66.42.124.79`
+应该返回 `216.128.151.224`
 
 ### V2Ray无法启动
 

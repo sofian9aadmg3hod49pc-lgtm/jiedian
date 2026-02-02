@@ -48,13 +48,13 @@ location /monitor/ {
 ### 方式一：直接访问
 ```
 http://ttjj11233.duckdns.org:3001
-http://66.42.124.79:3001
+http://216.128.151.224:3001
 ```
 
 ### 方式二：Nginx代理（推荐）
 ```
 http://ttjj11233.duckdns.org/monitor/
-http://66.42.124.79/monitor/
+http://216.128.151.224/monitor/
 ```
 
 ## 🔐 登录凭证

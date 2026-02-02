@@ -120,20 +120,20 @@ cd /workspace/jiedian/v2ray-deploy
 
 ```bash
 # 连接服务器
-ssh root@66.42.124.79
+ssh root@216.128.151.224
 
 # 上传脚本
-scp /workspace/jiedian/v2ray-deploy/remote-install.sh root@66.42.124.79:/tmp/
+scp /workspace/jiedian/v2ray-deploy/remote-install.sh root@216.128.151.224:/tmp/
 
 # 运行安装
-ssh root@66.42.124.79 "bash /tmp/remote-install.sh ttjj11233.duckdns.org 443"
+ssh root@216.128.151.224 "bash /tmp/remote-install.sh ttjj11233.duckdns.org 443"
 ```
 
 ## 📊 系统配置
 
 | 配置项 | 值 |
 |--------|-----|
-| 服务器IP | 66.42.124.79 |
+| 服务器IP | 216.128.151.224 |
 | 域名 | ttjj11233.duckdns.org |
 | V2Ray端口 | 443 |
 | 协议 | VMess + WebSocket + TLS |

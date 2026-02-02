@@ -28,10 +28,10 @@ cd /workspace/monitor-dashboard
 tar -czf /tmp/monitor.tar.gz .
 
 # 2. 上传到服务器
-sshpass -p "8@DqCfQ9)QK)rE9[" scp -o StrictHostKeyChecking=no /tmp/monitor.tar.gz root@66.42.124.79:/tmp/
+sshpass -p "8@DqCfQ9)QK)rE9[" scp -o StrictHostKeyChecking=no /tmp/monitor.tar.gz root@216.128.151.224:/tmp/
 
 # 3. SSH登录服务器
-ssh root@66.42.124.79
+ssh root@216.128.151.224
 
 # 4. 备份现有配置（如果有）
 cd /root
@@ -128,7 +128,7 @@ http://ttjj11233.duckdns.org:3001
 
 **检查服务是否运行：**
 ```bash
-ssh root@66.42.124.79
+ssh root@216.128.151.224
 ps aux | grep "[n]ode.*server.js"
 ```
 
@@ -194,21 +194,21 @@ nohup node server.js > /var/log/monitor.log 2>&1 &
 ### 实时查看日志
 
 ```bash
-ssh root@66.42.124.79
+ssh root@216.128.151.224
 tail -f /var/log/monitor.log
 ```
 
 ### 查看 V2Ray 访问日志
 
 ```bash
-ssh root@66.42.124.79
+ssh root@216.128.151.224
 tail -f /var/log/v2ray/access.log
 ```
 
 ### 查看系统资源
 
 ```bash
-ssh root@66.42.124.79
+ssh root@216.128.151.224
 htop
 # 或
 top
@@ -221,7 +221,7 @@ top
 如果新版本有问题，可以快速回滚：
 
 ```bash
-ssh root@66.42.124.79
+ssh root@216.128.151.224
 
 # 停止新服务
 pkill -f "node.*server.js"
@@ -243,7 +243,7 @@ nohup node server.js > /var/log/monitor.log 2>&1 &
 ### 修改默认密码
 
 ```bash
-ssh root@66.42.124.79
+ssh root@216.128.151.224
 cd /root/monitor-dashboard
 
 # 编辑 server.js
