@@ -2,7 +2,7 @@
 
 # 快速修复监控面板并部署到Vultr
 
-SERVER_IP="66.42.124.79"
+SERVER_IP="216.128.151.224"
 SERVER_PORT="2222"
 
 echo "=== 快速修复监控面板并部署 ==="
@@ -91,7 +91,7 @@ if [ $? -eq 0 ]; then
     echo "=== 部署完成 ==="
     echo ""
     echo "请访问以下地址验证:"
-    echo "  http://66.42.124.79/monitor/"
+    echo "  http://216.128.151.224/monitor/"
     echo "  http://ttjj11233.duckdns.org/monitor/"
     echo ""
 else

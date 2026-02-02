@@ -61,7 +61,7 @@ Vultr 服务器
 
 ```bash
 # 登录到 Vultr 服务器
-ssh root@66.42.124.79
+ssh root@216.128.151.224
 
 # 进入监控面板目录
 cd /root/monitor-dashboard  # 或实际的监控面板路径

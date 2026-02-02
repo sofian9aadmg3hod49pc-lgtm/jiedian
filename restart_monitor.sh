@@ -44,7 +44,7 @@ if pgrep -f "node server.js" > /dev/null; then
     echo "✓ 日志文件: /tmp/monitor/server.log"
     echo ""
     echo "访问地址:"
-    echo "  - http://66.42.124.79:3001/"
+    echo "  - http://216.128.151.224:3001/"
     echo "  - http://ttjj11233.duckdns.org:3001/"
     echo ""
     echo "默认账号: admin"
