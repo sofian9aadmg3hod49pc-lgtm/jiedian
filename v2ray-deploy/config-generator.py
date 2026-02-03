@@ -114,6 +114,7 @@ def main():
     output_dir = "/tmp"
     config_file = os.path.join(output_dir, "shadowrocket-config.json")
     url_file = os.path.join(output_dir, "shadowrocket-url.txt")
+    verify_file = os.path.join(output_dir, "verify-config.sh")  # 新增验证脚本
     
     # 保存JSON配置
     with open(config_file, 'w', encoding='utf-8') as f:
@@ -123,9 +124,38 @@ def main():
     with open(url_file, 'w') as f:
         f.write(vmess_link + "\n")
     
+    # 生成验证脚本
+    uuid_val = v2ray_info['uuid']
+    verify_script = f'''#!/bin/bash
+# 配置验证脚本
+echo "=========================================="
+echo "配置验证工具"
+echo "=========================================="
+echo ""
+echo "服务器信息："
+echo "  地址: {domain}"
+echo "  端口: {port}"
+echo "  路径: /v2ray"
+echo "  TLS: 开启"
+echo ""
+echo "UUID验证："
+echo "  完整UUID: {uuid_val}"
+echo "  分段显示: {uuid_val[0:8]}-{uuid_val[9:13]}-{uuid_val[14:18]}-{uuid_val[19:23]}-{uuid_val[24:36]}"
+echo "  后12位: {uuid_val[-12:]}"
+echo ""
+echo "验证方法："
+echo "  1. 在Shadowrocket中手动输入以上信息"
+echo "  2. 或者使用配置文件导入"
+echo "=========================================="
+'''
+    
+    with open(verify_file, 'w') as f:
+        f.write(verify_script)
+    os.chmod(verify_file, 0o755)
+    
     # 输出结果
     print("\n" + "="*60)
-    print("Shadowrocket 配置生成完成")
+    print("Shadowrocket 配置生成完成（增强版）")
     print("="*60)
     print(f"\n服务器信息:")
     print(f"  域名: {domain}")
@@ -134,17 +164,23 @@ def main():
     print(f"  WebSocket路径: {v2ray_info['ws_path']}")
     print(f"  传输协议: WebSocket + TLS")
     
+    # 显示UUID校验信息
+    print(f"\nUUID校验信息:")
+    print(f"  完整: {uuid_val}")
+    print(f"  分段: {uuid_val[0:8]}-{uuid_val[9:13]}-{uuid_val[14:18]}")
+    print(f"  校验: 请确保扫描后与上方一致")
+    
     print(f"\n配置文件已保存:")
     print(f"  {config_file}")
     print(f"  {url_file}")
+    print(f"  {verify_file} (验证脚本)")
     
     print(f"\nVMess链接:")
     print(f"  {vmess_link}")
-    print("\n使用方法:")
-    print("  1. 复制上面的vmess://链接")
-    print("  2. 在Shadowrocket中点击 + -> 类型选择VMess")
-    print("  3. 粘贴链接，点击保存")
-    print("  4. 启用配置并测试连接")
+    print("\n推荐导入方法（按可靠性排序）:")
+    print("  1. 配置文件导入: 下载 {config_file}，在Shadowrocket中导入")
+    print("  2. 手动配置: 按照验证脚本中的信息手动输入")
+    print("  3. 二维码扫描: 扫描时仔细核对UUID")
     print("\n" + "="*60)
 
 

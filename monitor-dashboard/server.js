@@ -75,32 +75,32 @@ function getRealTimeStats() {
     };
 }
 
-// 获取当前连接数
+// 获取当前连接数（从collector生成的stats.json读取）
 function getCurrentConnections() {
     try {
-        // 读取V2Ray日志获取连接数
-        const accessLog = '/var/log/v2ray/access.log';
-        if (fs.existsSync(accessLog)) {
-            const content = fs.readFileSync(accessLog, 'utf8');
-            const lines = content.split('\n').filter(line => line.trim());
-            return lines.length;
+        if (fs.existsSync(DATA_FILE)) {
+            const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+            return data.connections || 0;
         }
         return 0;
     } catch (error) {
+        console.error('读取连接数失败:', error);
         return 0;
     }
 }
 
-// 获取流量统计
+// 获取流量统计（从collector生成的stats.json读取）
 function getTrafficStats() {
     try {
         if (fs.existsSync(DATA_FILE)) {
             const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-            return {
-                upload: data.upload || 0,
-                download: data.download || 0,
-                total: (data.upload || 0) + (data.download || 0)
-            };
+            if (data.traffic) {
+                return {
+                    upload: data.traffic.upload || 0,
+                    download: data.traffic.download || 0,
+                    total: data.traffic.total || ((data.traffic.upload || 0) + (data.traffic.download || 0))
+                };
+            }
         }
     } catch (error) {
         console.error('读取流量数据失败:', error);
@@ -149,29 +149,8 @@ function calculateCPUUsage(cpus) {
     return (100 - ~~(100 * idle / total)).toFixed(2);
 }
 
-// 保存统计数据
-function saveStats(stats) {
-    try {
-        const dir = path.dirname(DATA_FILE);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-        fs.writeFileSync(DATA_FILE, JSON.stringify(stats, null, 2));
-    } catch (error) {
-        console.error('保存统计数据失败:', error);
-    }
-}
-
-// 数据收集定时任务
-setInterval(() => {
-    const stats = {
-        timestamp: Date.now(),
-        connections: getCurrentConnections(),
-        traffic: getTrafficStats(),
-        system: getSystemStats()
-    };
-    saveStats(stats);
-}, 60000); // 每分钟保存一次
+// 注意: 不再使用saveStats()和定时任务保存数据
+// 数据由v2ray-stats-collector通过systemd定时器每分钟更新
 
 // 启动服务器
 server.listen(PORT, '0.0.0.0', () => {

@@ -64,10 +64,31 @@ ENDSSH
 
 # 6. 设置权限和启动服务
 echo ""
-echo "步骤 6/7: 设置权限并启动服务..."
+echo "步骤 6/7: 安装数据收集器并启动服务..."
 sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no root@$SERVER << 'ENDSSH'
 # 设置配置文件权限
 chmod 644 /tmp/v2ray-info.json 2>/dev/null || echo "警告: V2Ray配置文件不存在"
+
+# 安装数据收集器
+echo "安装V2Ray数据收集器..."
+cp /root/monitor-dashboard/collector/v2ray-stats-collector.js /usr/local/bin/
+chmod +x /usr/local/bin/v2ray-stats-collector.js
+
+# 安装Systemd服务
+echo "安装Systemd定时器..."
+cp /root/monitor-dashboard/systemd/monitor-collector.service /etc/systemd/system/
+cp /root/monitor-dashboard/systemd/monitor-collector.timer /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable monitor-collector.timer
+systemctl start monitor-collector.timer
+
+# 应用V2Ray日志配置补丁
+echo "应用V2Ray访问日志配置..."
+if [ -f "/root/monitor-dashboard/v2ray-patch/apply-access-log-patch.sh" ]; then
+    bash /root/monitor-dashboard/v2ray-patch/apply-access-log-patch.sh
+else
+    echo "警告: V2Ray补丁脚本不存在"
+fi
 
 # 停止旧服务
 pkill -f "node.*server.js" 2>/dev/null || echo "未发现旧服务"
@@ -89,6 +110,13 @@ else
     echo "❌ 服务启动失败"
     tail -20 /var/log/monitor.log
     exit 1
+fi
+
+# 检查数据收集定时器
+if systemctl is-active --quiet monitor-collector.timer; then
+    echo "✅ 数据收集定时器已启动"
+else
+    echo "⚠️  数据收集定时器未启动"
 fi
 ENDSSH
 

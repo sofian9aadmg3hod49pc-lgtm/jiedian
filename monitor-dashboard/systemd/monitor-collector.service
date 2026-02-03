@@ -1,0 +1,12 @@
+[Unit]
+Description=V2Ray统计数据收集器
+After=network.target v2ray.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/node /usr/local/bin/v2ray-stats-collector.js
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

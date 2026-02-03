@@ -1,0 +1,11 @@
+[Unit]
+Description=每分钟运行V2Ray统计数据收集器
+Requires=monitor-collector.service
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+AccuracySec=1s
+Persistent=true
+
+[Install]
+WantedBy=timers.target
