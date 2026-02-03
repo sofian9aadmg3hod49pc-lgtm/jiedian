@@ -10,13 +10,14 @@ echo "========================================"
 echo ""
 
 # 配置
-SERVER="66.42.124.79"
-PASSWORD="8@DqCfQ9)QK)rE9["
+SERVER="216.128.151.224"
+PASSWORD=""
 LOCAL_DIR="/workspace/monitor-dashboard"
 REMOTE_DIR="/root/monitor-dashboard"
 
 # 1. 打包本地文件
 echo "步骤 1/7: 打包监控面板文件..."
+LOCAL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/monitor-dashboard" && pwd)"
 cd "$LOCAL_DIR"
 tar -czf /tmp/monitor.tar.gz .
 echo "✅ 打包完成"
@@ -25,13 +26,13 @@ ls -lh /tmp/monitor.tar.gz
 # 2. 上传到服务器
 echo ""
 echo "步骤 2/7: 上传文件到服务器..."
-sshpass -p "$PASSWORD" scp -o StrictHostKeyChecking=no /tmp/monitor.tar.gz root@$SERVER:/tmp/
+scp -o StrictHostKeyChecking=no /tmp/monitor.tar.gz root@$SERVER:/tmp/
 echo "✅ 上传完成"
 
 # 3. 备份现有配置
 echo ""
 echo "步骤 3/7: 备份现有配置..."
-sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no root@$SERVER << 'ENDSSH'
+ssh -o StrictHostKeyChecking=no root@$SERVER << 'ENDSSH'
 cd /root
 if [ -d "monitor-dashboard" ]; then
     BACKUP_DIR="monitor-dashboard-backup-$(date +%Y%m%d_%H%M%S)"
@@ -46,7 +47,7 @@ ENDSSH
 # 4. 解压新文件
 echo ""
 echo "步骤 4/7: 解压新文件..."
-sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no root@$SERVER << 'ENDSSH'
+ssh -o StrictHostKeyChecking=no root@$SERVER << 'ENDSSH'
 cd /root/monitor-dashboard
 tar -xzf /tmp/monitor.tar.gz
 rm /tmp/monitor.tar.gz
@@ -56,7 +57,7 @@ ENDSSH
 # 5. 安装依赖
 echo ""
 echo "步骤 5/7: 安装 Node.js 依赖..."
-sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no root@$SERVER << 'ENDSSH'
+ssh -o StrictHostKeyChecking=no root@$SERVER << 'ENDSSH'
 cd /root/monitor-dashboard
 npm install --silent
 echo "✅ 依赖安装完成"
@@ -65,7 +66,7 @@ ENDSSH
 # 6. 设置权限和启动服务
 echo ""
 echo "步骤 6/7: 安装数据收集器并启动服务..."
-sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no root@$SERVER << 'ENDSSH'
+ssh -o StrictHostKeyChecking=no root@$SERVER << 'ENDSSH'
 # 设置配置文件权限
 chmod 644 /tmp/v2ray-info.json 2>/dev/null || echo "警告: V2Ray配置文件不存在"
 
@@ -127,7 +128,7 @@ sleep 2
 
 echo ""
 echo "检查服务状态..."
-sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no root@$SERVER << 'ENDSSH'
+ssh -o StrictHostKeyChecking=no root@$SERVER << 'ENDSSH'
 echo "========================================"
 echo "进程状态："
 ps aux | grep "[n]ode.*server.js"
@@ -142,7 +143,8 @@ echo "✅ 部署完成！"
 echo "========================================"
 echo ""
 echo "访问地址："
-echo "  http://ttjj11233.duckdns.org:3001"
+echo "  http://216.128.151.224:3001"
+echo "  http://216.128.151.224/monitor/"
 echo ""
 echo "登录信息："
 echo "  用户名: admin"
@@ -161,5 +163,5 @@ echo "  3. 点击复制按钮测试复制功能"
 echo "  4. 用手机扫描二维码测试扫码功能"
 echo ""
 echo "如遇问题，执行以下命令查看日志："
-echo "  ssh root@66.42.124.79"
+echo "  ssh root@216.128.151.224"
 echo "  tail -f /var/log/monitor.log"
